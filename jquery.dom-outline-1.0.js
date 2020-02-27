@@ -20,7 +20,6 @@ var DomOutline = function (options) {
             borderWidth: 2,
             onClick: false,
             filter: false,
-            stopWhenClicked: true
         }, options || {}),
         keyCodes: {
             BACKSPACE: 8,
@@ -136,9 +135,8 @@ var DomOutline = function (options) {
     }
 
     function clickHandler(e) {
-        if (jsonSelf.opts.stopWhenClicked) pub.stop();
-        jsonSelf.opts.onClick(pub.element);
-
+        // If the callback `onClick` returns false, stop outlining DOM element.
+        if (jsonSelf.opts.onClick(pub.element) === false) pub.stop();
         return false;
     }
 
@@ -175,6 +173,11 @@ var DomOutline = function (options) {
     Object.defineProperty(pub, 'onClick', {
         set: function(rValue) {
             jsonSelf.opts.onClick = rValue;
+        }
+    });
+    Object.defineProperty(pub, 'filter', {
+        set: function(rValue) {
+            jsonSelf.opts.filter = rValue;
         }
     });
 
